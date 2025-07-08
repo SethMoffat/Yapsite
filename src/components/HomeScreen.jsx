@@ -30,7 +30,7 @@ const HomeScreen = ({ onLoginClick }) => {
   }, []);
 
   const handleMobileLogin = () => {
-    // Direct Twitch OAuth for mobile app users
+    // Direct Twitch OAuth for mobile app users - using Implicit Grant
     const clientId = TWITCH_CONFIG.CLIENT_ID;
     const redirectUri = encodeURIComponent(TWITCH_CONFIG.REDIRECT_URI);
     const scope = encodeURIComponent(TWITCH_CONFIG.SCOPES.join(' '));
@@ -45,8 +45,9 @@ const HomeScreen = ({ onLoginClick }) => {
     localStorage.setItem('mobile_login', 'true');
     localStorage.setItem('twitch_oauth_state', state);
     
-    // Redirect to Twitch OAuth
-    const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
+    // Redirect to Twitch OAuth using Implicit Grant (response_type=token)
+    // This returns an access token directly instead of an authorization code
+    const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}&state=${state}`;
     window.location.href = authUrl;
   };
 

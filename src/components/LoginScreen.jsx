@@ -4,7 +4,7 @@ import './LoginScreen.css';
 
 const LoginScreen = ({ onBackToHome, onLoginSuccess }) => {
   const handleTwitchOAuth = () => {
-    // Twitch OAuth configuration
+    // Twitch OAuth configuration - using Implicit Grant
     const clientId = TWITCH_CONFIG.CLIENT_ID;
     const redirectUri = encodeURIComponent(TWITCH_CONFIG.REDIRECT_URI);
     const scope = encodeURIComponent(TWITCH_CONFIG.SCOPES.join(' '));
@@ -18,8 +18,8 @@ const LoginScreen = ({ onBackToHome, onLoginSuccess }) => {
     // Store state in localStorage for validation (optional security measure)
     localStorage.setItem('twitch_oauth_state', state);
     
-    // Redirect to Twitch OAuth
-    const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}&state=${state}`;
+    // Redirect to Twitch OAuth using Implicit Grant (response_type=token)
+    const authUrl = `https://id.twitch.tv/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}&state=${state}`;
     window.location.href = authUrl;
   };
 
