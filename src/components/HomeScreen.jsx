@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { TWITCH_CONFIG } from '../config/twitch';
 import './HomeScreen.css';
 
 const HomeScreen = ({ onLoginClick }) => {
@@ -30,10 +31,15 @@ const HomeScreen = ({ onLoginClick }) => {
 
   const handleMobileLogin = () => {
     // Direct Twitch OAuth for mobile app users
-    const clientId = 'YOUR_TWITCH_CLIENT_ID'; // Replace with your actual Client ID
-    const redirectUri = encodeURIComponent('https://yap.center/auth/callback');
-    const scope = encodeURIComponent('user:read:email');
+    const clientId = TWITCH_CONFIG.CLIENT_ID;
+    const redirectUri = encodeURIComponent(TWITCH_CONFIG.REDIRECT_URI);
+    const scope = encodeURIComponent(TWITCH_CONFIG.SCOPES.join(' '));
     const state = encodeURIComponent('mobile_' + Math.random().toString(36).substring(2, 15));
+    
+    if (clientId === 'YOUR_TWITCH_CLIENT_ID') {
+      alert('Please update your Twitch Client ID in src/config/twitch.js');
+      return;
+    }
     
     // Store that this is a mobile login
     localStorage.setItem('mobile_login', 'true');

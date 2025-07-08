@@ -1,13 +1,19 @@
 import React from 'react';
+import { TWITCH_CONFIG } from '../config/twitch';
 import './LoginScreen.css';
 
 const LoginScreen = ({ onBackToHome, onLoginSuccess }) => {
   const handleTwitchOAuth = () => {
     // Twitch OAuth configuration
-    const clientId = 'YOUR_TWITCH_CLIENT_ID'; // You'll need to replace this with your actual client ID
-    const redirectUri = encodeURIComponent('https://yap.center/auth/callback');
-    const scope = encodeURIComponent('user:read:email');
+    const clientId = TWITCH_CONFIG.CLIENT_ID;
+    const redirectUri = encodeURIComponent(TWITCH_CONFIG.REDIRECT_URI);
+    const scope = encodeURIComponent(TWITCH_CONFIG.SCOPES.join(' '));
     const state = encodeURIComponent(Math.random().toString(36).substring(2, 15));
+    
+    if (clientId === 'YOUR_TWITCH_CLIENT_ID') {
+      alert('Please update your Twitch Client ID in src/config/twitch.js');
+      return;
+    }
     
     // Store state in localStorage for validation (optional security measure)
     localStorage.setItem('twitch_oauth_state', state);
