@@ -27,22 +27,44 @@ const AuthCallback = () => {
           return;
         }
 
-        // Here you would typically exchange the code for an access token
-        // For now, we'll just prepare the data for the mobile app
+        // Check if this is a mobile login
+        const isMobileLogin = localStorage.getItem('mobile_login') === 'true' || 
+                             (state && state.startsWith('mobile_'));
+        
+        // Prepare the data for the mobile app
         const authData = {
           code: code,
           state: state,
           timestamp: Date.now()
         };
 
-        // Try to redirect back to your mobile app
-        // You'll need to register a custom URL scheme for your app
-        const mobileAppUrl = `yapapp://auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state || '')}`;
-        
-        // Try to open the mobile app
-        window.location.href = mobileAppUrl;
+        if (isMobileLogin) {
+          // Try different mobile app URL schemes
+          const appSchemes = [
+            `yapapp://auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state || '')}`,
+            `yap://auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state || '')}`,
+            `com.yourapp.yap://auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state || '')}`
+          ];
 
-        // If the mobile app doesn't open, show success message
+          // Try each scheme
+          for (const scheme of appSchemes) {
+            try {
+              window.location.href = scheme;
+              break;
+            } catch (e) {
+              console.log(`Failed to open ${scheme}:`, e);
+            }
+          }
+
+          // Clean up
+          localStorage.removeItem('mobile_login');
+          localStorage.removeItem('twitch_oauth_state');
+        } else {
+          // Regular web login - redirect to app
+          window.location.href = '/';
+        }
+
+        // Show success message after attempting redirect
         setTimeout(() => {
           setStatus('success');
         }, 2000);
@@ -90,7 +112,16 @@ const AuthCallback = () => {
         <div className="success-icon">✅</div>
         <h2>Authentication Successful!</h2>
         <p>You should be redirected to your mobile app automatically.</p>
-        <p>If not, please return to your app manually.</p>
+        <p><strong>If the app doesn't open:</strong></p>
+        <ul style={{textAlign: 'left', marginBottom: '1rem'}}>
+          <li>Return to your mobile app manually</li>
+          <li>Pull down to refresh the login screen</li>
+          <li>Try the login process again</li>
+        </ul>
+        <div className="auth-code-info">
+          <p><strong>Authorization Code:</strong></p>
+          <code>{new URLSearchParams(window.location.search).get('code')?.substring(0, 20)}...</code>
+        </div>
         <button onClick={() => window.location.href = '/'} className="back-btn">
           Go Back to Home
         </button>
