@@ -3,6 +3,7 @@ import './HomeScreen.css';
 
 const HomeScreen = ({ onLoginClick }) => {
   const [isMobileApp, setIsMobileApp] = useState(false);
+  const [showMobilePrompt, setShowMobilePrompt] = useState(false);
 
   useEffect(() => {
     // Check if the user came from a mobile app
@@ -11,7 +12,20 @@ const HomeScreen = ({ onLoginClick }) => {
                       urlParams.get('app') === 'true' ||
                       window.location.href.includes('mobile=true');
     
-    setIsMobileApp(fromMobile);
+    // Also check user agent for mobile devices as fallback
+    const isMobileDevice = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Also check if referrer suggests mobile app
+    const referrer = document.referrer;
+    const fromMobileApp = referrer === '' || referrer.includes('android-app://') || referrer.includes('ios-app://');
+    
+    const shouldShowMobileView = fromMobile || (isMobileDevice && fromMobileApp);
+    setIsMobileApp(shouldShowMobileView);
+    
+    // Show mobile prompt for mobile devices that aren't in mobile view
+    if (isMobileDevice && !shouldShowMobileView) {
+      setShowMobilePrompt(true);
+    }
   }, []);
 
   const handleMobileLogin = () => {
@@ -57,6 +71,28 @@ const HomeScreen = ({ onLoginClick }) => {
   }
   return (
     <div className="home-screen">
+      {showMobilePrompt && (
+        <div className="mobile-prompt">
+          <div className="mobile-prompt-content">
+            <p>📱 Are you here from the Yap mobile app?</p>
+            <div className="mobile-prompt-actions">
+              <button 
+                onClick={() => setIsMobileApp(true)} 
+                className="mobile-yes-btn"
+              >
+                Yes, login for the app
+              </button>
+              <button 
+                onClick={() => setShowMobilePrompt(false)} 
+                className="mobile-no-btn"
+              >
+                No, just browsing
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <nav className="navbar">
         <div className="nav-brand">
           <h2>YapSite</h2>
@@ -79,6 +115,9 @@ const HomeScreen = ({ onLoginClick }) => {
               </button>
               <button className="btn btn-secondary">
                 Learn More
+              </button>
+              <button className="btn btn-mobile" onClick={handleMobileLogin}>
+                📱 Mobile App Login
               </button>
             </div>
           </div>
