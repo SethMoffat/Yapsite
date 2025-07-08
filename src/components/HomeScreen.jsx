@@ -6,7 +6,7 @@ const HomeScreen = ({ onLoginClick }) => {
     <div className="home-screen">
       <nav className="navbar">
         <div className="nav-brand">
-          <h2>YapSite</h2>
+          <h2>YapSite Test</h2>
         </div>
         <div className="nav-links">
           <button className="nav-btn" onClick={onLoginClick}>Login</button>
