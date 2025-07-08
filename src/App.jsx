@@ -3,7 +3,6 @@ import { TWITCH_CONFIG } from './config/twitch'
 import HomeScreen from './components/HomeScreen'
 import LoginScreen from './components/LoginScreen'
 import Dashboard from './components/Dashboard'
-import AuthCallback from './components/AuthCallback'
 import './App.css'
 
 function App() {
@@ -112,9 +111,6 @@ function App() {
           onBackToHome={handleBackToHome}
           onLoginSuccess={handleLoginSuccess}
         />
-      )}
-      {currentScreen === 'callback' && (
-        <AuthCallback />
       )}
       {currentScreen === 'dashboard' && (
         <Dashboard 
