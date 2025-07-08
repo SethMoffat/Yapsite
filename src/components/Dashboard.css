@@ -31,6 +31,28 @@
   gap: 1rem;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.twitch-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #9146FF;
+  border-radius: 50%;
+  color: white;
+}
+
+.twitch-badge svg {
+  width: 16px;
+  height: 16px;
+}
+
 .nav-user span {
   color: #333;
   font-weight: 500;
@@ -135,6 +157,10 @@
   .nav-user {
     flex-direction: column;
     gap: 0.5rem;
+  }
+  
+  .user-info {
+    order: 2;
   }
   
   .dashboard-content {

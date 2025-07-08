@@ -1,12 +1,21 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import HomeScreen from './components/HomeScreen'
 import LoginScreen from './components/LoginScreen'
 import Dashboard from './components/Dashboard'
+import AuthCallback from './components/AuthCallback'
 import './App.css'
 
 function App() {
   const [currentScreen, setCurrentScreen] = useState('home')
   const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    // Check if this is the OAuth callback URL
+    const path = window.location.pathname;
+    if (path === '/auth/callback' || window.location.search.includes('code=')) {
+      setCurrentScreen('callback');
+    }
+  }, []);
 
   const handleLoginClick = () => {
     setCurrentScreen('login')
@@ -36,6 +45,9 @@ function App() {
           onBackToHome={handleBackToHome}
           onLoginSuccess={handleLoginSuccess}
         />
+      )}
+      {currentScreen === 'callback' && (
+        <AuthCallback />
       )}
       {currentScreen === 'dashboard' && (
         <Dashboard 

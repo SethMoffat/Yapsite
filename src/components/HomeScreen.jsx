@@ -53,7 +53,7 @@ const HomeScreen = ({ onLoginClick }) => {
       </main>
       
       <footer className="footer">
-        <p>&copy; 2025 YapSite. All rights reserved.</p>
+        <p>&copy; 2025 Yap. All rights reserved.</p>
       </footer>
     </div>
   );

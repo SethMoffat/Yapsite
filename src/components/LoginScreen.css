@@ -59,91 +59,58 @@
   font-size: 1rem;
 }
 
-.login-form {
+.twitch-login-section {
+  margin: 2rem 0;
   display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
 }
 
-.form-group {
+.twitch-login-btn {
   display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  color: #333;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  font-size: 0.9rem;
-}
-
-.form-group input {
-  padding: 0.75rem;
-  border: 2px solid #e1e5e9;
-  border-radius: 10px;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-  background: #f8f9fa;
-}
-
-.form-group input:focus {
-  outline: none;
-  border-color: #667eea;
-  background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-group input::placeholder {
-  color: #adb5bd;
-}
-
-.submit-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  background: #9146FF;
   color: white;
   border: none;
-  padding: 0.75rem;
+  padding: 1rem 2rem;
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  margin-top: 1rem;
+  width: 100%;
+  max-width: 300px;
 }
 
-.submit-btn:hover {
+.twitch-login-btn:hover {
+  background: #7B42F6;
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 20px rgba(145, 70, 255, 0.3);
 }
 
-.submit-btn:active {
-  transform: translateY(0);
+.twitch-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.login-footer {
+.twitch-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.login-info {
   text-align: center;
-  margin-top: 2rem;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid #e1e5e9;
 }
 
-.login-footer p {
+.login-info p {
   color: #666;
+  font-size: 0.85rem;
+  line-height: 1.4;
   margin: 0;
-  font-size: 0.9rem;
-}
-
-.toggle-btn {
-  background: none;
-  border: none;
-  color: #667eea;
-  font-weight: 600;
-  cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.9rem;
-}
-
-.toggle-btn:hover {
-  color: #764ba2;
 }
 
 @media (max-width: 480px) {
