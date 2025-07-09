@@ -59,6 +59,80 @@ function App() {
         localStorage.setItem('twitch_user', JSON.stringify(userData.data[0]));
         
         setUser(username);
+        
+        // Check if this is a mobile authentication
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('mobile') === 'true') {
+          // Redirect back to mobile app with token and user data
+          const mobileRedirectData = {
+            access_token: accessToken,
+            user: userData.data[0],
+            success: true
+          };
+          
+          // Try different mobile app schemes
+          const schemes = [
+            `yap-mobile://auth?data=${encodeURIComponent(JSON.stringify(mobileRedirectData))}`,
+            `exp://127.0.0.1:8081/--/auth?data=${encodeURIComponent(JSON.stringify(mobileRedirectData))}`,
+            `exp://192.168.1.100:8081/--/auth?data=${encodeURIComponent(JSON.stringify(mobileRedirectData))}`
+          ];
+          
+          // Show a message to the user
+          document.body.innerHTML = `
+            <div style="
+              display: flex; 
+              flex-direction: column; 
+              align-items: center; 
+              justify-content: center; 
+              height: 100vh; 
+              font-family: Arial, sans-serif;
+              background: #0e0e10;
+              color: white;
+              text-align: center;
+              padding: 20px;
+            ">
+              <h2>✅ Authentication Successful!</h2>
+              <p>Redirecting you back to the Yap Mobile app...</p>
+              <p style="margin-top: 20px;">If you're not redirected automatically:</p>
+              <button onclick="window.close()" style="
+                background: #9146ff;
+                color: white;
+                border: none;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 16px;
+                cursor: pointer;
+                margin: 10px;
+              ">Close this window</button>
+            </div>
+          `;
+          
+          // Try to redirect to mobile app
+          let redirected = false;
+          for (const scheme of schemes) {
+            try {
+              window.location.href = scheme;
+              redirected = true;
+              break;
+            } catch (error) {
+              console.log('Failed to redirect with scheme:', scheme);
+            }
+          }
+          
+          if (!redirected) {
+            // Fallback: try to close the window
+            setTimeout(() => {
+              try {
+                window.close();
+              } catch (e) {
+                console.log('Could not close window automatically');
+              }
+            }, 2000);
+          }
+          
+          return; // Don't continue with web flow
+        }
+        
         setCurrentScreen('dashboard');
       } else {
         throw new Error('Failed to fetch user data');
