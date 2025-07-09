@@ -23,6 +23,14 @@ const HomeScreen = ({ onLoginClick }) => {
     const shouldShowMobileView = fromMobile || (isMobileDevice && fromMobileApp);
     setIsMobileApp(shouldShowMobileView);
     
+    // Auto-redirect mobile users to Twitch authentication
+    if (fromMobile) {
+      console.log('Mobile user detected, auto-redirecting to Twitch authentication...');
+      setTimeout(() => {
+        handleMobileLogin();
+      }, 1000); // 1 second delay to show the interface briefly
+    }
+    
     // Show mobile prompt for mobile devices that aren't in mobile view
     if (isMobileDevice && !shouldShowMobileView) {
       setShowMobilePrompt(true);
@@ -112,7 +120,7 @@ const HomeScreen = ({ onLoginClick }) => {
       <main className="main-content">
         <section className="hero">
           <div className="hero-content">
-            <h1 className="hero-title">Welcome to Yap Test</h1>
+            <h1 className="hero-title">Welcome to Yap Testy</h1>
             <p className="hero-subtitle">
               Your ultimate destination for sharing thoughts, connecting with others, and building meaningful conversations.
             </p>

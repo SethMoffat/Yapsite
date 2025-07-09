@@ -14,15 +14,15 @@ function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const hashParams = new URLSearchParams(window.location.hash.substring(1));
     
-    // Check for mobile parameter
-    if (urlParams.get('mobile') === 'true') {
-      setCurrentScreen('mobile');
-    }
-    
     // Check for access token in URL hash (Implicit Grant response)
     const accessToken = hashParams.get('access_token');
     const state = hashParams.get('state');
     const error = hashParams.get('error');
+    
+    console.log('URL params:', Object.fromEntries(urlParams));
+    console.log('Hash params:', Object.fromEntries(hashParams));
+    console.log('Access token found:', !!accessToken);
+    console.log('State:', state);
     
     if (accessToken) {
       // Handle successful authentication
@@ -31,6 +31,12 @@ function App() {
       // Handle authentication error
       console.error('OAuth Error:', error);
       setCurrentScreen('home');
+    } else {
+      // Check for mobile parameter only if no token processing
+      const isMobile = urlParams.get('mobile') === 'true' || localStorage.getItem('mobile_login') === 'true';
+      if (isMobile) {
+        setCurrentScreen('mobile');
+      }
     }
   }, []);
 
@@ -62,7 +68,16 @@ function App() {
         
         // Check if this is a mobile authentication
         const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('mobile') === 'true') {
+        const isMobileSession = urlParams.get('mobile') === 'true' || 
+                               localStorage.getItem('mobile_login') === 'true' ||
+                               (state && state.startsWith('mobile_'));
+        
+        console.log('Is mobile session:', isMobileSession);
+        console.log('URL mobile param:', urlParams.get('mobile'));
+        console.log('Local storage mobile:', localStorage.getItem('mobile_login'));
+        console.log('State starts with mobile:', state && state.startsWith('mobile_'));
+        
+        if (isMobileSession) {
           // Redirect back to mobile app with token and user data
           const mobileRedirectData = {
             access_token: accessToken,
